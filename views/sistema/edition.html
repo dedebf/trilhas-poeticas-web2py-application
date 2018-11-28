@@ -1,0 +1,72 @@
+{{extend 'layout.html'}}
+<h1>Este é o template default/edition.html</h1>
+{{=BEAUTIFY(response._vars)}}
+<script src="https://maps.google.com/maps/api/js?sensor=true"></script>
+<script src="{{=URL('static','js/gmaps.js')}}"></script>
+<div id="map" style="height:400px;width:400px"></div>
+<script>
+function loadMaps(){
+    console.log("load maps");
+}
+$(document).ready(function(){
+    checkMapContainer();
+});
+function checkMapContainer(){
+    if($('#mapForm').is(':visible')){
+        console.log("mapForm is visible");
+        appendMapFormAfterContent();
+        initMaps();
+        document.getElementById("t_pois_f_latitude").readOnly = true;
+        document.getElementById("t_pois_f_longitude").readOnly = true;
+    }else{
+        console.log("mapForm is NOT visible");
+        setTimeout(checkMapContainer, 50);
+    }
+}
+function appendMapFormAfterContent(){
+    $("#mapFormContainer").insertAfter("#t_pois_f_content__row");
+}
+function initMaps() {
+  map = new GMaps({
+    div: '#mapForm',
+    lat: -15,
+    lng: -47,
+
+    click: function(e){
+      //clear points
+      removeAllMarkers();
+      //set new marker
+      addMarker(e.latLng);
+      //put inside input
+      setInputs(e.latLng);
+  }
+  });
+    function removeAllMarkers(){map.removeMarkers();}
+    function addMarker(pos){
+        map.addMarker({
+            lat: pos.lat(),
+            lng: pos.lng()
+        });
+    }
+    function setInputs(pos){
+        //doc.getElByID.valueX = pos.lat();
+        document.getElementById('t_pois_f_latitude').value = pos.lat();
+        document.getElementById('t_pois_f_longitude').value = pos.lng();
+        //doc.getElByID.valueX = pos.lat();
+    }
+ GMaps.geolocate({
+  success: function(position) {
+    map.setCenter(position.coords.latitude, position.coords.longitude);
+  },
+  error: function(error) {
+    alert('Geolocation failed: '+error.message);
+  },
+  not_supported: function() {
+    alert("Your browser does not support geolocation");
+  },
+  always: function() {
+    //alert("Done!");
+  }
+});
+}
+</script>

@@ -1,0 +1,86 @@
+{{extend 'layout-interna.html'}}
+<h1>EDITAR TRILHA</h1>
+<hr>
+
+{{=form.custom.begin}}
+<div class="row">
+    <div class="col-md-5">
+        <div class="form-group engloba-upload">
+            <label for="f_icon">Ícone</label>
+            {{=form.custom.widget.f_icon}}
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="f_name">Nome da trilha</label>
+    {{=form.custom.widget.f_name}}
+</div>
+
+<div class="form-group">
+    <label for="f_parental_rating">Classificação indicativa</label>
+    <div style="display: none;">{{=form.custom.widget.f_parental_rating}}</div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <a onClick="document.getElementById('t_tracks_f_parental_rating').value='3'" class="livre"><img class="classicao-indicativa 3" src="/trilhaspoeticas/static/images/Class_Indic_00_indisp.png"></a>
+            <a onClick="document.getElementById('t_tracks_f_parental_rating').value='4'" class="10"><img class="classicao-indicativa 4" src="/trilhaspoeticas/static/images/Class_Indic_10_indisp.png"></a>
+            <a onClick="document.getElementById('t_tracks_f_parental_rating').value='5'" class="12"><img class="classicao-indicativa 5" src="/trilhaspoeticas/static/images/Class_Indic_12_indisp.png"></a>
+            <a  onClick="document.getElementById('t_tracks_f_parental_rating').value='6'" class="14"><img class="classicao-indicativa 6" src="/trilhaspoeticas/static/images/Class_Indic_14_indisp.png"></a>
+            <a  onClick="document.getElementById('t_tracks_f_parental_rating').value='7'" class="16"><img class="classicao-indicativa 7" src="/trilhaspoeticas/static/images/Class_Indic_16_indisp.png"></a>
+            <a onClick="document.getElementById('t_tracks_f_parental_rating').value='8'" class="18"><img class="classicao-indicativa 8" src="/trilhaspoeticas/static/images/Class_Indic_18_indisp.png"></a>
+        </div>
+    </div>
+
+
+</div>  
+
+<div class="form-group">
+    <label for="f_description">Descrição</label>
+    {{=form.custom.widget.f_description}}
+</div>
+
+<div class="form-group" id="tagFormContainer"> 
+    <label id="tagFormLabel" name="tagLabel">Tags</label>
+    <br>
+    <input class="tagsInputClass" data-role="tagsinput" id="tagForm" name="tag" type="text" value="{{=tagValues}}">
+    
+</div>
+
+
+
+<span class="data-criacao-lbl">Data de criação: </span> <span id="create-data"></span>
+
+
+<input class="btn btn-primary salvar-trilha" value="Salvar" type="submit">
+
+{{=form.custom.end}}
+<script>
+    $(document).ready(function(){
+        transformDate();
+        changeActiveClass();
+    });
+
+    function transformDate(){
+        var str = "{{=f_create_date}}";
+        var res = str.replace(/-/g, ".");
+        document.getElementById("create-data").innerHTML = res;
+    }
+
+    function changeActiveClass(){
+        var cssClass = "." + $( "#t_tracks_f_parental_rating" ).val();
+        $(cssClass).addClass('ci-active');
+        $(cssClass).attr('src',$(cssClass).attr('src').replace("indisp", "dispo"));
+
+        $('.classicao-indicativa').click(function(){
+            srcImg = $('.ci-active').attr('src');
+            if(srcImg != undefined){
+                newSrcImg = srcImg.replace("dispo", "indisp");
+                $('.ci-active').attr('src',newSrcImg);
+            }
+            $('.ci-active').removeClass('ci-active'); // remove the class from the currently selected
+            $(this).addClass('ci-active'); // add the class to the newly clicked link
+            $(this).attr('src',$(this).attr('src').replace("indisp", "dispo"));
+        });
+    }
+</script>

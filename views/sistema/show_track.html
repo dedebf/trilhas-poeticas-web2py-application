@@ -1,0 +1,188 @@
+{{extend 'layout-interna.html'}}
+<div class="show_track">
+<div class="engloba-titulo">
+    <h1>{{=f_name}}</h1>
+    <span id="change-date"></span>
+</div>
+<div id="editar-trilha">
+    {{=b_editar_trilha}}
+</div>
+<hr/>
+
+
+<div class="row">
+    <div class="col-md-6">
+        <div id="map"></div>
+        <div class="engloba-icon-level">
+            <a href="/trilhaspoeticas/sistema/download/{{=f_icon}}" data-featherlight="#mylightbox">
+                <img id="mylightbox" class="track-icon" src="/trilhaspoeticas/sistema/download/{{=f_icon}}"></a>
+            </div>
+            <div id="parentalRating2"></div>
+
+        </div>
+        <div class="col-md-6">
+            <table class="detalhes-trilha">
+                <tr>
+                    <td class="indice-detalhe">ID</td><td class="conteudo-detalhe">{{=f_id}}</td>
+                </tr>
+                <tr>
+                    <td class="indice-detalhe">CRIADOR</td><td class="conteudo-detalhe">{{=f_owner}}</td>
+                </tr>
+                <tr>
+                    <td class="indice-detalhe indice-descricao">DESCRIÇÃO</td><td class="conteudo-detalhe conteudo-descricao"><p>{{=f_description}}</p></td>
+                </tr>
+                <tr>
+                    <td class="indice-detalhe">TAG</td><td class="conteudo-detalhe" id="tag">{{=tags}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <br/>
+    <div id="add-poi">
+        {{=b_add_poi}}
+        <a href="" class="btn btn-primary">editar ordem</a>
+    </div>
+    {{=grid}}
+    <br /><br />
+</div>
+    <script src="https://maps.google.com/maps/api/js?sensor=true&key=AIzaSyCEfUGsJxvCd9zE8EZEd9ug_d3gFKB7igY"></script>
+    <script src="{{=URL('static','js/gmaps.js')}}"></script>
+
+
+    <script>
+        $(document).ready(function(){
+            transformDate();
+            transformTag();
+            parentalRatingTransform();
+            initMaps();
+            transformPoiDesc();
+        });
+
+        function transformPoiDesc(){
+            var tds = $("#show_track .-webgrid-row td:nth-child(3)");
+            console.log(tds);
+
+            $.each($(tds), function(){
+                var itemHtml = $(this).html();
+                itemHtml = itemHtml.replace(/&(lt|gt);/g, function (strMatch, p1){
+                    return (p1 == "lt")? "<" : ">";
+                });
+                itemHtml = itemHtml.replace(/&(lt|gt);/g, function (strMatch, p1){
+                    return (p1 == "lt")? "<" : ">";
+                });
+                itemHtml = itemHtml.replace(/<\/?[^>]+(>|$)/g, "");
+                $(this).html(itemHtml);
+
+            });
+        }
+
+        function initMaps(){
+            if({{=path}} == ""){
+                document.getElementById("map").innerHTML = "Não há ponto cadastrado para montatar o mapa";
+            }else{
+                var path = {{=path}};
+                map = new GMaps({
+                    div: '#map',
+                    lat: (path[0])[0],
+                    lng: (path[0])[1],
+                    zoom: 4,
+                    mapTypeControl: true,
+                    overviewMapControl: true,
+                    mapTypeControlOptions: {
+                        mapTypeIds : ["map_style", "hybrid", "satellite", "terrain"]
+                    },
+                });
+                //adding style to map
+                var stylez = [
+                    {
+                      featureType: "all",
+                      elementType: "all",
+                      stylers: [
+                        { saturation: -100 } // <-- THIS
+                      ]
+                    }, {
+                      featureType: "road",
+                    }
+                ];
+                map.addStyle({
+                    styledMapName:"Mapa",
+                    styles: stylez,
+                    mapTypeId: "map_style"  
+                });
+                map.setStyle("map_style");
+                map.drawPolyline({
+                  path: path,
+                  strokeColor: '#131540',
+                  strokeOpacity: 0.6,
+                  strokeWeight: 6
+              });
+                for (poi in path){
+                    addMarker((path[poi])[0],(path[poi])[1]);
+                }
+                function addMarker(lat,lng){    
+                    map.addMarker({
+                        lat: lat,
+                        lng: lng,
+                    });
+                    //Zoom and center the map to fit the markers
+                    if (path.length >1) {
+                        var bounds = new google.maps.LatLngBounds();
+                        for (poi in path) {
+                            var data = path[poi];
+                            bounds.extend(new google.maps.LatLng(data[0], data[1]));
+                        }
+                        map.fitBounds(bounds);
+                    }
+                }
+            }
+        }
+
+
+
+function parentalRatingTransform(){
+    var parentalRating;
+
+    switch ({{=f_parental_rating}}){
+        case 3:
+        parentalRating = "livre.png";
+        break;
+        case 4:
+        parentalRating = "10.png";
+        break;
+        case 5:
+        parentalRating = "12.png";
+        break;
+        case 6:
+        parentalRating = "14.png";
+        break;
+        case 7:
+        parentalRating = "16.png";
+        break;
+        case 8:
+        parentalRating = "18.png";
+        break;
+    } 
+
+    document.getElementById("parentalRating2").innerHTML = "<img src="+'/trilhaspoeticas/static/images/'+parentalRating+" alt="+parentalRating+">";
+}
+
+function transformDate(){
+    var str = "{{=f_create_date}}";
+    var res = str.replace(/-/g, ".");
+    document.getElementById("change-date").innerHTML = res;
+}
+
+function transformTag(){
+    var str = "{{=tags}}";
+    if (str != ""){
+        var res = str.substr(0,(str.length - 2));
+        var res = res.replace(/;/g, "</span> <span>");
+        document.getElementById("tag").innerHTML = "<span>"+res+"</span>";
+    }else{
+        document.getElementById("tag").innerHTML = "";
+    }
+
+}
+
+</script>

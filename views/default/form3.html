@@ -1,0 +1,73 @@
+{{extend 'layout-interna.html'}}
+<script src="https://maps.google.com/maps/api/js?sensor=true"></script>
+<script src="{{=URL('static','js/gmaps.js')}}"></script>
+<div>
+{{=form.custom.begin}}
+{{=form.custom.widget.search}}{{=form.custom.submit}}
+{{=form.custom.end}}
+</div>
+{{if longitude or latitude:}}
+<p>latitude, longtitude: {{=latitude}},{{=longitude}}</p>
+<div id="map" style="height:400px;width:800px"></div>
+<script>
+$(document).ready(function(){
+  map = new GMaps({
+    div: '#map',
+    lat: {{=latitude}},
+    lng: {{=longitude}},
+                  
+    click: function(e){
+      //clear points
+      removeAllMarkers();
+      //set new marker
+      addMarker(e.latLng);
+      //put inside input
+      setInputs(e.latLng);
+      console.log(e.latLng.lat());
+      console.log(e.latLng.lng());
+  }
+  });
+    function removeAllMarkers(){
+        console.log("remove all markers");
+        map.removeMarkers();
+    }
+    function addMarker(pos){
+        console.log("add marker");
+        map.addMarker({
+            lat: pos.lat(),
+            lng: pos.lng()
+        });
+    }
+    function setInputs(pos){
+        //doc.getElByID.valueX = pos.lat();
+        //doc.getElByID.valueX = pos.lat();
+    }
+   map.addMarker({
+    lat: {{=latitude}},
+    lng: {{=longitude}},
+    title: 'Here!',
+    infoWindow: {
+        content: '<p>{{=request.vars.search}}</p>'
+    }
+  });
+  google.maps.event.addListener(map, 'click', function(event) {
+    console.log(event.latLng);
+    placeMarker(event.latLng);
+  });
+ GMaps.geolocate({
+  success: function(position) {
+    map.setCenter(position.coords.latitude, position.coords.longitude);
+  },
+  error: function(error) {
+    alert('Geolocation failed: '+error.message);
+  },
+  not_supported: function() {
+    alert("Your browser does not support geolocation");
+  },
+  always: function() {
+    alert("Done!");
+  }
+});
+});
+</script>
+{{pass}}

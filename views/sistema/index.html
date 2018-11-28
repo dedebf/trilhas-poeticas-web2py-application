@@ -1,0 +1,42 @@
+{{extend 'layout-interna.html'}}
+<h1>MINHAS TRILHAS</h1>
+<a class="nova-trilha btn btn-primary" href="/trilhaspoeticas/sistema/nova_trilha">Nova Trilha</a>
+<hr/>
+{{=grid}}
+<br/>
+
+<script type="text/javascript">
+	$( document ).ready(function() {
+
+		$( "table th:nth-child(1)" ).attr('colspan',2);
+		classificacaoOrdenacao = "<a href='/trilhaspoeticas/sistema/index?index_ascending=True&amp;index_pagenum=1&amp;index_sortby=t_tracks.f_parental_rating'>CLASSIFICAÇÃO</a>";
+		$( "table th:nth-child(1)" ).html(classificacaoOrdenacao);
+		$("table td:nth-child(1)").addClass("icon2");
+		$("table td:nth-child(3)").addClass("titulo");
+		$("table td:nth-child(4)").addClass("descricao");
+
+		$(".classificacao").each(function(index) {
+			var text = ' /trilhaspoeticas/static/images/' + $(this).text().toLowerCase() + '.png' ;
+			var classificacao = $(this).text();
+			$(this).html("<img src="+text+" alt="+classificacao+">");
+		});
+
+		var tam = $(window).width();
+		var seletor = $(".descricao");
+
+		if (tam >=990 ){
+			quantidade = 170;
+		}else{
+			quantidade = 60;
+		}
+
+		$(seletor).each(function(){
+			elemento = $(this);
+			if (elemento.text().length > quantidade) {
+				elemento.text($(this).text().substr(0, quantidade - 3)); 
+				elemento.append('...');
+			}
+		});
+
+	});
+</script>

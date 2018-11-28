@@ -1,0 +1,131 @@
+/*** Ajustes para adequação do Layout do hotsite - Trilhas Poéticas ***/
+
+html, body { 
+  font-family: 'Open Sans', sans-serif; 
+  color: #a09d9d;
+  margin:0; 
+  webkit-background-size: cover !important;
+  -moz-background-size: cover !important;
+  -o-background-size: cover !important;
+  background-size: cover !important;
+  height: 100% !important;
+  position: relative !important;
+  margin-top: 10px;
+  /*min-width: 450px;*/
+}
+
+a img,:link img,:visited img { border:none }
+
+
+h1 {
+  font-size: 40px;
+  line-height: 1;
+  margin-top: 35px;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  font-family: 'Six Caps', sans-serif;
+  word-break: break-word;
+}
+p{
+  text-align: justify;
+}
+
+.clear{
+  clear: both;
+}
+.center{
+  margin: 0 auto;
+  display: table;
+}
+.center1{
+  margin: 0 auto;
+}
+
+.text-justify{
+  text-align: justify;
+}
+
+.btn{
+  margin-right: 12px;
+  font-size: 12px;
+  padding:13px 20px;
+}
+
+.btn-primary, .btn-default{
+  background-image: none;
+  background: #991B3E;
+  border-color: #991B3E;
+  border-radius: 0;
+  color: #fff;
+  text-shadow:none;
+}
+
+.btn-primary:focus, .btn-primary:hover,
+.btn-default:focus, .btn-default:hover{
+  background-color: #AD364D;
+  border-color: #AD364D;
+  color:#ffffff;
+}
+
+div.flash.alert{
+  background-color: #60CAE6;
+  border-color: #60CAE6;
+  color:#fff;
+  border-radius: none;
+  right: 40%;
+}
+
+#header{
+  /*position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #fff;*/
+} 
+
+.logo-container{
+  margin-bottom: 25px;
+  width: 100%;
+}
+
+.menu, .footer{
+  width: 100%;
+  background-color: #333;
+}
+.menu ul, .footer ul {
+    list-style-type: none;
+    margin:  auto;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+.menu li, .footer li {
+    float: left;
+}
+
+.menu li a, .footer li a {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.menu li a:hover {
+    background-color: #111;
+}
+
+.main-container{
+  width: 100%;
+  max-width: 600px;
+
+  /*margin-top: 172px;*/
+}
+
+
+.footer{
+}
+
+.logo {
+  max-width: 100%;
+}
+

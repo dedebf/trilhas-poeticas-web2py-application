@@ -1,0 +1,24 @@
+{{extend 'layout-interna.html'}}
+<h1>Cadastrar Trilha Poética</h1>
+{{=BEAUTIFY(form)}}
+{{=response.toolbar()}}
+<script type="text/javascript">
+    //trying to get the change of tagsinput
+    $("#tagForm").on("input",function(e){
+        if($(this).data("lastval")!= $(this).val()){
+            $(this).data("lastval",$(this).val());
+            //change action
+            console.log($(this).val());
+            console.log($("input").val());
+        };
+    });
+    $(document).ready(function () {
+        $('#bootstrapTagsInputForm')
+        .find('[name="tag"]')
+                // Revalidate the cities field when it is changed
+                .change(function (e) {
+                    console.log(e);
+                });
+            });
+
+        </script>

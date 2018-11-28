@@ -1,0 +1,91 @@
+{{extend 'layout.html'}}
+<div class="container">
+	<div class="row">
+		<div class="col-md-4"></div>
+
+		<div class="col-md-4">
+			{{=form.custom.begin}}  
+			<div class="form-group">
+				<label for="first_name">Nome </label>
+				{{=form.custom.widget.first_name}}
+			</div>
+
+			<div class="form-group">
+				<label for="last_name">Sobrenome</label>
+				{{=form.custom.widget.last_name}}
+			</div>
+
+			<div class="form-group">
+				<label for="email">e-Mail </label>
+				{{=form.custom.widget.email}}
+			</div>
+
+			<div class="form-group">
+				<label for="password">Senha</label>
+				{{=form.custom.widget.password}}
+			</div>
+
+			<div class="form-group">
+				<label for="password_two">Senha</label>
+				{{=form.custom.widget.password_two}}
+			</div>
+
+			<div class="form-group">
+				<label for="descricao">Descrição</label>
+				{{=form.custom.widget.descricao}}
+			</div>
+
+			<div class="form-group">
+				<label for="Avatar">Avatar</label>
+				{{=form.custom.widget.avatar}}
+			</div>
+			<div class="form-group">
+			    {{=form.custom.widget.modified_on}}
+			</div>
+			<script type="text/javascript">
+				document.getElementById('auth_user_modified_on').setAttribute('type','hidden');
+
+			    // $('input#auth_user_modified_on').attr('type','hidden');
+
+			    var modifiedOn = new Date();
+			    // .toUTCString();
+			    // 2017-05-30T21:05:11.213Z to
+			    // 2017-01-26 16:50:54
+			    var hourOffset = parseInt(modifiedOn.getTimezoneOffset()/60);
+			    var isoDate = modifiedOn.toISOString();
+			    var datetime = isoDate.split("T");
+			    var date = datetime[0];
+			    var time = datetime[1].split(".")[0];
+			    var hour = parseInt(time.split(":")[0]);
+			    var day = date.split("-")[2];
+
+			    if(hour-hourOffset < 0){
+			        day = day - 1;
+			        hour = Math.abs(hour-hourOffset);
+			    }else if(hour-hourOffset > 24){
+			        day = day + 1;
+			        hour = hour-hourOffset-24;
+			    }else{
+			        hour = hour-hourOffset;
+			    }
+			    date = day+"/"+date.split("-")[1]+"/"+date.split("-")[0];
+			    time = hour+":"+time.split(":")[1]+":"+time.split(":")[2];
+			    datetime = date+" "+time;
+
+			    // $('#auth_user_modified_on').val(datetime);
+			    document.getElementById('auth_user_modified_on').value = datetime;
+			</script>
+
+			<div class="right">
+				<input type="submit" class="btn btn-primary" value="Cadastrar">
+				<a href="{{=URL('default','user.html')}}" class="btn btn-primary">Voltar</a>
+			</div>
+			<div class="col-md-4"></div>
+		</div>
+	</div>
+</div>
+
+
+
+{{=form.custom.end}}
+
